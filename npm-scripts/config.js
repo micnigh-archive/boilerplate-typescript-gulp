@@ -14,4 +14,4 @@ module.exports = {
       "--moduleResolution node"
     ].concat(glob.sync("server/**/*.ts{,x}"))
   }
-}
+};
