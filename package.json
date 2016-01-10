@@ -17,6 +17,7 @@
     "gulp-size": "^2.0.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-typescript": "^2.10.0",
+    "requirejs": "^2.1.22",
     "typescript": "^1.7.5"
   }
 }

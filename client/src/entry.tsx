@@ -1,3 +1,4 @@
+/// <amd-module name="./entry"/>
 import * as HelloWorld from "./component/HelloWorld";
 
 console.log("entry imported");

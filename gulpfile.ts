@@ -14,13 +14,21 @@ Object.assign(tsClientCompilerOptions, {
 });
 let tsClientProject = typescript.createProject(tsClientCompilerOptions);
 
-gulp.task("build", ["build:js"]);
+gulp.task("build", ["build:js", "build:html"]);
+
+gulp.task("build:html", [], function () {
+  return gulp.src(["server/public/**/*"])
+    .pipe(size({ showFiles: true }))
+    .pipe(gulp.dest(distPath));
+});
+
 gulp.task("build:js", ["build:js:app", "build:js:lib"]);
 
 gulp.task("build:js:lib", [], function () {
   return gulp.src([
     "node_modules/es5-shim/es5-shim.js",
     "node_modules/es5-shim/es5-sham.js",
+    "node_modules/requirejs/require.js",
   ])
     .pipe(sourcemaps.init())
     .pipe(size({ showFiles: true }))
@@ -41,7 +49,10 @@ gulp.task("build:js:app", [], function () {
     .pipe(size({ showFiles: true }));
 });
 
-gulp.task("watch", ["build", "watch:js"]);
+gulp.task("watch", ["build", "watch:js", "watch:html"]);
+gulp.task("watch:html", ["build:html"], function () {
+  return gulp.watch(["server/public/**/*"], ["build:html"]);
+})
 gulp.task("watch:js", ["build:js", "watch:js:app"]);
 gulp.task("watch:js:app", ["build:js:app"], function () {
   return gulp.watch(["client/src/**/*.ts{,x}"], ["build:js:app"]);
