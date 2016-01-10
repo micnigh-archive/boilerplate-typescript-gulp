@@ -34,6 +34,9 @@
     },
     "glob/glob.d.ts": {
       "commit": "6eebd5e90a1cbd6b47b0705ba72dbcd5baf846f3"
+    },
+    "gulp-sass/gulp-sass.d.ts": {
+      "commit": "6eebd5e90a1cbd6b47b0705ba72dbcd5baf846f3"
     }
   }
 }
