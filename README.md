@@ -13,7 +13,7 @@ gulp typescript example project
 
 ```bash
 # first time
-npm install -g jspm tsd browser-sync
+npm install -g gulp tsd browser-sync
 npm install
 
 # every time
@@ -27,20 +27,6 @@ node ./npm-scripts/watch-gulp-typescript.js
  - [typescript] - javascript type support, also enables ES6 syntax
  - [gulp] - automated build system
  - [tslint] - automatic code style guide enforcement
-
-# How to
-
-## Bundle
-
-```bash
-# bundle all together, including libs, no `system.js` dependency
-jspm bundle-sfx --minify client/src/app .tmp/all.js
-
-# bundle with libs/app seperate, requires `system.js` lib and config loaded
-jspm bundle --minify client/src/app - [npm:**/*] - [github:**/*] .tmp/app.js
-jspm bundle --minify client/src/**/* - [client/src/**/*] .tmp/lib.js
-
-```
 
 ---
 
