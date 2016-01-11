@@ -80,6 +80,7 @@ function bundleBrowserifyBuild (b: Browserify.BrowserifyObject, buildOptions: Br
 
 function browserifyBuild (browserifyOptions: Browserify.Options, buildOptions: BrowserifyBuildOptions): NodeJS.ReadWriteStream {
     let b = browserify(Object.assign({
+      debug: isDev,
       extensions: [".js", ".jsx", ".es6", "ts", "tsx"],
       externals: [],
       requires: [],
@@ -97,20 +98,37 @@ function browserifyBuild (browserifyOptions: Browserify.Options, buildOptions: B
     return bundleBrowserifyBuild(b, buildOptions);
 }
 
+gulp.task("browserify:build:js:app", [], function () {
+  return browserifyBuild({
+    entries: [
+      "client/src/entry.tsx"
+    ],
+    includes: [
+      "client/src",
+    ],
+  }, {
+    watch: false,
+    destFileName: "app.js",
+    tsConfig: require("./tsconfig.json").compilerOptions,
+  });
+});
+
+gulp.task("browserify:watch:js:app", [], function () {
+  return browserifyBuild({
+    entries: [
+      "client/src/entry.tsx"
+    ],
+    includes: [
+      "client/src",
+    ],
+  }, {
+    watch: true,
+    destFileName: "app.js",
+    tsConfig: require("./tsconfig.json").compilerOptions,
+  });
+});
+
 gulp.task("build:js:app", [], function () {
-  // return browserifyBuild({
-  //   entries: [
-  //     "client/src/entry.tsx"
-  //   ],
-  //   includes: [
-  //     "client/src",
-  //   ],
-  // }, {
-  //   watch: true,
-  //   destFileName: "app.js",
-  //   tsConfig: require("./tsconfig.json").compilerOptions,
-  // });
-  
   return gulp.src(["client/src/**/*.ts{,x}"])
     .pipe(sourcemaps.init())
     .pipe(typescript(tsClientProject))
