@@ -5,6 +5,12 @@ import * as sourcemaps from "gulp-sourcemaps";
 import * as concat from "gulp-concat";
 import * as size from "gulp-size";
 import * as sass from "gulp-sass";
+import source = require("vinyl-source-stream");
+import * as chalk from "chalk";
+import * as browserify from "browserify";
+let watchify: {(instance: Browserify.BrowserifyObject): Browserify.BrowserifyObject} = require("watchify");
+let buffer = require("gulp-buffer");
+let prettyTime = require("pretty-hrtime");
 
 let isDev = process.env.NODE_ENV === "production" ? false : true;
 let distPath = isDev ? ".tmp/development" : ".tmp/production";
@@ -48,7 +54,63 @@ gulp.task("build:js:lib", [], function () {
     .pipe(gulp.dest(distPath));
 });
 
+interface BrowserifyBuildOptions {
+  tsConfig: { compilerOptions: any },
+  watch: boolean,
+  destFileName: string,
+};
+
+function bundleBrowserifyBuild (b: Browserify.BrowserifyObject, buildOptions: BrowserifyBuildOptions): NodeJS.ReadWriteStream {
+  let bundleStartTime = process.hrtime();
+  let bundle = b.bundle();
+  bundle
+    .on("error", function (msg) {
+      console.log(chalk.red(msg.toString()));
+    })
+    .on("end", function () {
+      console.log(`Bundled ${chalk.cyan(buildOptions.destFileName)} ${chalk.magenta(prettyTime(process.hrtime(bundleStartTime)))}`);
+    });
+
+  return bundle
+    .pipe(source(buildOptions.destFileName))
+    .pipe(buffer())
+    .pipe(size({ showFiles: true }))
+    .pipe(gulp.dest(distPath));
+}
+
+function browserifyBuild (browserifyOptions: Browserify.Options, buildOptions: BrowserifyBuildOptions): NodeJS.ReadWriteStream {
+    let b = browserify(Object.assign({
+      extensions: [".js", ".jsx", ".es6", "ts", "tsx"],
+      externals: [],
+      requires: [],
+      transforms: {},
+      // create empty caches - so bundles wont share cache
+      cache: {},
+      packageCache: {},
+    }, browserifyOptions));
+    b.plugin("tsify", buildOptions.tsConfig.compilerOptions);
+    if (buildOptions.watch) {
+      b.plugin(watchify);
+      b.on("update", () => bundleBrowserifyBuild(b, buildOptions));
+    }
+    
+    return bundleBrowserifyBuild(b, buildOptions);
+}
+
 gulp.task("build:js:app", [], function () {
+  // return browserifyBuild({
+  //   entries: [
+  //     "client/src/entry.tsx"
+  //   ],
+  //   includes: [
+  //     "client/src",
+  //   ],
+  // }, {
+  //   watch: true,
+  //   destFileName: "app.js",
+  //   tsConfig: require("./tsconfig.json").compilerOptions,
+  // });
+  
   return gulp.src(["client/src/**/*.ts{,x}"])
     .pipe(sourcemaps.init())
     .pipe(typescript(tsClientProject))
