@@ -17,8 +17,9 @@ npm install -g gulp tsd browser-sync
 npm install
 
 # every time
-browser-sync start --server ./.tmp/development/ --files './.tmp/development/**/*.(css|js|html)'
+browser-sync start --server ./.tmp/development/ --files './.tmp/development/**/*.(css|html),./.tmp/development/app.js'
 gulp watch
+gulp browserify:watch:js:app
 node ./npm-scripts/watch-gulp-typescript.js
 ```
 
