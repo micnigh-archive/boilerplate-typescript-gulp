@@ -12,6 +12,8 @@
     "es5-shim": "^4.4.1",
     "glob": "^6.0.4",
     "gulp": "^3.9.0",
+    "gulp-amd-idfy": "^0.2.0",
+    "gulp-amd-optimizer": "^0.4.0",
     "gulp-babel": "^6.1.1",
     "gulp-concat": "^2.6.0",
     "gulp-size": "^2.0.0",
