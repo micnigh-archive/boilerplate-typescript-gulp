@@ -5,6 +5,8 @@ import * as sourcemaps from "gulp-sourcemaps";
 import * as concat from "gulp-concat";
 import * as size from "gulp-size";
 
+let amdOptimize = require("amd-optimize");
+
 let isDev = process.env.NODE_ENV === "production" ? false : true;
 let distPath = isDev ? ".tmp/development" : ".tmp/production";
 
@@ -33,7 +35,7 @@ gulp.task("build:js:lib", [], function () {
     .pipe(sourcemaps.init())
     .pipe(size({ showFiles: true }))
     .pipe(concat("lib.js"))
-    .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write("."))
     .pipe(gulp.dest(distPath))
     .pipe(size({ showFiles: true }));
 });
@@ -43,8 +45,9 @@ gulp.task("build:js:app", [], function () {
     .pipe(sourcemaps.init())
     .pipe(typescript(tsClientProject))
     .pipe(size({ showFiles: true }))
+    .pipe(amdOptimize("entry"))
     .pipe(concat("app.js"))
-    .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write("."))
     .pipe(gulp.dest(distPath))
     .pipe(size({ showFiles: true }));
 });
