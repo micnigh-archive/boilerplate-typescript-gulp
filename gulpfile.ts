@@ -11,6 +11,7 @@ import * as browserify from "browserify";
 let watchify: {(instance: Browserify.BrowserifyObject): Browserify.BrowserifyObject} = require("watchify");
 let buffer = require("gulp-buffer");
 let prettyTime = require("pretty-hrtime");
+let babelify = require("babelify");
 
 let isDev = process.env.NODE_ENV === "production" ? false : true;
 let distPath = isDev ? ".tmp/development" : ".tmp/production";
@@ -82,7 +83,8 @@ function bundleBrowserifyBuild (b: Browserify.BrowserifyObject, buildOptions: Br
 
 function browserifyBuild (browserifyOptions: Browserify.Options, buildOptions: BrowserifyBuildOptions): NodeJS.ReadWriteStream {
     let b = browserify(Object.assign({
-      extensions: [".js", ".jsx", ".es6", "ts", "tsx"],
+      debug: isDev,
+      extensions: [".js", ".jsx", ".es6", ".ts", ".tsx"],
       externals: [],
       requires: [],
       transforms: {},
@@ -90,7 +92,14 @@ function browserifyBuild (browserifyOptions: Browserify.Options, buildOptions: B
       cache: {},
       packageCache: {},
     }, browserifyOptions));
-    // b.plugin("tsify", buildOptions.tsConfig.compilerOptions);
+    b.plugin("tsify", buildOptions.tsConfig.compilerOptions);
+    b.transform(babelify.configure({
+        extensions: [".js", ".jsx", ".es6", ".ts", ".tsx"],
+        presets: [
+          require("babel-preset-es2015"),
+          require("babel-preset-react"),
+        ],
+    }));
     if (buildOptions.watch) {
       b.plugin(watchify);
       b.on("update", () => bundleBrowserifyBuild(b, buildOptions));
@@ -101,7 +110,7 @@ function browserifyBuild (browserifyOptions: Browserify.Options, buildOptions: B
 gulp.task("browserify:build:js:app", [], function () {
   return browserifyBuild({
     entries: [
-      ".tmp/development/entry.js"
+      "client/src/entry.tsx"
     ],
     includes: [
       "client/src",
@@ -116,7 +125,7 @@ gulp.task("browserify:build:js:app", [], function () {
 gulp.task("browserify:watch:js:app", [], function () {
   return browserifyBuild({
     entries: [
-      ".tmp/development/entry.js"
+      "client/src/entry.tsx"
     ],
     includes: [
       "client/src",
