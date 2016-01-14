@@ -6,6 +6,8 @@ import * as concat from "gulp-concat";
 import * as size from "gulp-size";
 import * as sass from "gulp-sass";
 
+let insert = require("gulp-insert");
+
 let isDev = process.env.NODE_ENV === "production" ? false : true;
 let distPath = isDev ? ".tmp/development" : ".tmp/production";
 
@@ -50,12 +52,17 @@ gulp.task("build:js:lib", [], function () {
 
 gulp.task("build:js:app", [], function () {
   return gulp.src(["client/src/**/*.ts{,x}"])
+    .pipe(insert.transform((contents, file) => {
+      let id = `/// <amd-module name="${"./" + file.relative.replace(/\..+$/, "").replace("\\", "/")}" />\n`;
+      //console.log(id + contents.toString());
+      return id + contents.toString();
+    }))
     .pipe(sourcemaps.init())
     .pipe(typescript(tsClientProject))
     .pipe(size({ showFiles: true }))
-    // .pipe(concat("app.js"))
+    .pipe(concat("app.js"))
     // .pipe(size({ showFiles: true }))
-    .pipe(sourcemaps.write("."))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest(distPath));
 });
 
