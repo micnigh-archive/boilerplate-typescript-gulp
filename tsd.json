@@ -9,7 +9,7 @@
       "commit": "b4646ff708f39d2896bcb3e3974667f92e26c5a4"
     },
     "node/node.d.ts": {
-      "commit": "6eebd5e90a1cbd6b47b0705ba72dbcd5baf846f3"
+      "commit": "2e7a477ac2b6471055aa6e0e56b333e8f327d6b7"
     },
     "orchestrator/orchestrator.d.ts": {
       "commit": "b4646ff708f39d2896bcb3e3974667f92e26c5a4"
@@ -34,6 +34,21 @@
     },
     "glob/glob.d.ts": {
       "commit": "6eebd5e90a1cbd6b47b0705ba72dbcd5baf846f3"
+    },
+    "gulp-babel/gulp-babel.d.ts": {
+      "commit": "2e7a477ac2b6471055aa6e0e56b333e8f327d6b7"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "2e7a477ac2b6471055aa6e0e56b333e8f327d6b7"
+    },
+    "react/react.d.ts": {
+      "commit": "2e7a477ac2b6471055aa6e0e56b333e8f327d6b7"
+    },
+    "react/react-dom.d.ts": {
+      "commit": "2e7a477ac2b6471055aa6e0e56b333e8f327d6b7"
+    },
+    "gulp-rename/gulp-rename.d.ts": {
+      "commit": "2e7a477ac2b6471055aa6e0e56b333e8f327d6b7"
     }
   }
 }

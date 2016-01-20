@@ -1,0 +1,8 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+console.log("HelloWorld Imported");
+exports.default = "Hello World";
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudFxcSGVsbG9Xb3JsZC5qc3giXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBQSxPQUFPLENBQUMsR0FBRyxDQUFDLHFCQUFxQixDQUFDLENBQUM7a0JBQ3BCLGFBQWEiLCJmaWxlIjoiY29tcG9uZW50XFxIZWxsb1dvcmxkLmpzeCIsInNvdXJjZXNDb250ZW50IjpbImNvbnNvbGUubG9nKFwiSGVsbG9Xb3JsZCBJbXBvcnRlZFwiKTtcclxuZXhwb3J0IGRlZmF1bHQgXCJIZWxsbyBXb3JsZFwiO1xyIl19

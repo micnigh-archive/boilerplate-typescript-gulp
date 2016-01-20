@@ -1,20 +1,19 @@
-/// <reference path="node_modules/typescript/lib/lib.es6.d.ts"/>
 import * as gulp from "gulp";
 import * as typescript from "gulp-typescript";
+import * as babel from "gulp-babel";
 import * as sourcemaps from "gulp-sourcemaps";
 import * as concat from "gulp-concat";
 import * as size from "gulp-size";
+let rename = require("gulp-rename");
 
-// let amdOptimize = require("amd-optimize");
-let amdOptimize = require("gulp-amd-optimizer");
-// let idfy = require("gulp-amd-idfy");
+import * as _ from "lodash";
 
 let isDev = process.env.NODE_ENV === "production" ? false : true;
 let distPath = isDev ? ".tmp/development" : ".tmp/production";
 
 let { compilerOptions: tsClientCompilerOptions } = require("./tsconfig.json");
-Object.assign(tsClientCompilerOptions, {
-  module: "amd",
+_.merge(tsClientCompilerOptions, {
+  module: "es6",
 });
 let tsClientProject = typescript.createProject(tsClientCompilerOptions);
 
@@ -32,7 +31,8 @@ gulp.task("build:js:lib", [], function () {
   return gulp.src([
     "node_modules/es5-shim/es5-shim.js",
     "node_modules/es5-shim/es5-sham.js",
-    "node_modules/requirejs/require.js",
+    "node_modules/react/dist/react.js",
+    "node_modules/react/dist/react-dom.js",
   ])
     .pipe(sourcemaps.init())
     .pipe(size({ showFiles: true }))
@@ -44,23 +44,18 @@ gulp.task("build:js:lib", [], function () {
 
 gulp.task("build:js:app", [], function () {
   return gulp.src(["client/src/**/*.ts{,x}"])
-    .pipe(sourcemaps.init())
     .pipe(typescript(tsClientProject))
-    .pipe(size({ showFiles: true }))
-    //.pipe(sourcemaps.write())
-    // .pipe(idfy())
-    // .pipe(amdOptimize("entry"))
-    //   baseUrl: "client/src/",
-    // .pipe(amdOptimize({
-    //   exclude: [
-    //     "require",
-    //     "exports",
-    //   ]
-    // }))
-    // .pipe(sourcemaps.init({ loadMaps: true }))
-    // .pipe(concat("app.js"))
-    .pipe(sourcemaps.write("."))
-    .pipe(gulp.dest(distPath))
+    // .pipe(rename({extname: ".es6"}))
+    // .pipe(gulp.dest("client/src/"))
+    .pipe(babel({
+      sourceMaps: "inline",
+      presets: [
+        "es2015",
+        "react",
+      ],
+    }))
+    .pipe(rename({extname: ".js"}))
+    .pipe(gulp.dest("client/src/"))
     .pipe(size({ showFiles: true }));
 });
 

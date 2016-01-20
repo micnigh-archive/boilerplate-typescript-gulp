@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "amd",
-    "jsx": "react",
+    "target": "es6",
+    "module": "es6",
+    "jsx": "preserve",
     "experimentalDecorators": true,
     "isolatedModules": true,
     "moduleResolution": "node"

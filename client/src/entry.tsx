@@ -1,8 +1,17 @@
-import * as HelloWorld from "./component/HelloWorld";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import * as _ from "lodash";
 
-console.log("entry imported");
-console.log(HelloWorld.default);
+import HelloWorld from "./component/HelloWorld";
 
-document.getElementById("content").innerHTML = HelloWorld.default;
+console.log(React);
 
-export default "something something";
+console.log(_.camelCase("react-dom"));
+
+ReactDOM.render((
+  <div>
+    <h1>{`Hello World - ${HelloWorld}`}</h1>
+  </div>
+), document.getElementById("content"));
+
+console.log("helloworld");
